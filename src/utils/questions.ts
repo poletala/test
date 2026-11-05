@@ -61,16 +61,30 @@ export function buildQuestionIds(options: BuildSessionOptions): string[] {
     );
   }
   if (mode === 'random') {
-    const seenTopics = new Set<string>();
-    const byTopic = shuffle(pool).sort((a, b) => {
-      const aSeen = seenTopics.has(a.topic) ? 1 : 0;
-      const bSeen = seenTopics.has(b.topic) ? 1 : 0;
-      if (aSeen !== bSeen) return aSeen - bSeen;
-      seenTopics.add(a.topic);
-      seenTopics.add(b.topic);
-      return 0;
-    });
-    return byTopic.slice(0, Math.min(options.count, byTopic.length)).map((q) => q.id);
+    // Сначала берём по одному вопросу из каждой темы, затем второй круг и т. д.
+    // Так случайная сессия не превращается в пять вопросов подряд про замыкания.
+    const groups = new Map<string, Question[]>();
+    for (const question of shuffle(pool)) {
+      const group = groups.get(question.topic) ?? [];
+      group.push(question);
+      groups.set(question.topic, group);
+    }
+    const topicGroups = shuffle([...groups.values()]);
+    const picked: Question[] = [];
+    let round = 0;
+    while (picked.length < options.count) {
+      let added = 0;
+      for (const group of topicGroups) {
+        const question = group[round];
+        if (question && picked.length < options.count) {
+          picked.push(question);
+          added += 1;
+        }
+      }
+      if (added === 0) break;
+      round += 1;
+    }
+    return picked.map((question) => question.id);
   }
 
   return shuffle(pool)

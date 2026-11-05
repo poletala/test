@@ -2,6 +2,8 @@ node_modules
 dist
 dist-ssr
 coverage
+.tmp
+.vite
 *.local
 .env
 .env.*

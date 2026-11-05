@@ -10,8 +10,6 @@ import { CATEGORY_BY_ID } from './categories';
  * replaced with more specialised hand-authored questions without UI changes.
  */
 const PACKS: ReadonlyArray<{ category: CategoryId; count: number; prefix: string }> = [
-  { category: 'react', count: 65, prefix: 'react' },
-  { category: 'mobx', count: 30, prefix: 'mobx' },
   { category: 'nodejs', count: 30, prefix: 'node' },
   { category: 'html-css', count: 30, prefix: 'htmlcss' },
   { category: 'browser', count: 30, prefix: 'browser' },

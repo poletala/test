@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '../hooks/useStores';
@@ -13,11 +14,13 @@ import { Button, ButtonLink } from '../components/common/Button';
 import { Icon } from '../components/common/Icon';
 import { CategoryCard } from '../components/dashboard/CategoryCard';
 import { ActivityList } from '../components/dashboard/ActivityList';
+import { Modal } from '../components/common/Modal';
 import type { QuizConfig } from '../types';
 
 export const DashboardPage = observer(function DashboardPage() {
   const { questions, progress, quiz, ui } = useStores();
   const navigate = useNavigate();
+  const [resetOpen, setResetOpen] = useState(false);
   const stats = progress.getOverallStats(questions);
   const readiness = computeReadiness(questions, progress.toState());
   const activity = getRecentAttempts(progress.toState(), 5);
@@ -28,6 +31,11 @@ export const DashboardPage = observer(function DashboardPage() {
     : 0;
 
   const startMode = (mode: QuizConfig['mode']) => {
+    if (progress.activeQuiz) {
+      ui.notify('Сначала завершите текущую сессию — иначе её прогресс будет перезаписан.', 'warning');
+      navigate('/quiz');
+      return;
+    }
     const config = createDefaultConfig(mode);
     if (mode === 'middle') {
       config.difficulties = ['junior-plus', 'middle'];
@@ -319,6 +327,39 @@ export const DashboardPage = observer(function DashboardPage() {
           ) : null}
         </section>
       </div>
+
+      <section className="data-panel">
+        <div>
+          <h2>Данные и приватность</h2>
+          <p>
+            Весь прогресс, закладки и история сессий хранятся только в LocalStorage этого
+            браузера. Аккаунт и сервер не используются.
+          </p>
+        </div>
+        <Button variant="danger" icon="trash" onClick={() => setResetOpen(true)}>
+          Сбросить прогресс
+        </Button>
+      </section>
+
+      <Modal
+        open={resetOpen}
+        title="Сбросить весь прогресс?"
+        onClose={() => setResetOpen(false)}
+        onConfirm={() => {
+          quiz.reset();
+          progress.reset();
+          setResetOpen(false);
+          ui.notify('Прогресс, закладки и история сессий удалены.', 'info');
+          navigate('/');
+        }}
+        confirmLabel="Удалить навсегда"
+        danger
+      >
+        <p>
+          Будут удалены все ответы, точность, закладки, незавершённая сессия и история.
+          Это действие нельзя отменить. Вопросы и приложение останутся доступны.
+        </p>
+      </Modal>
     </div>
   );
 });

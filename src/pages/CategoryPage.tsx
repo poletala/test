@@ -35,11 +35,9 @@ export const CategoryPage = observer(function CategoryPage() {
   const stats = progress.getOverallStats(questions).byCategory.find(
     (item) => item.categoryId === id,
   );
-  const topics = useMemo(
-    () =>
-      category ? computeCategoryTopicStats(questions, progress.toState(), category.id) : [],
-    [questions, progress, category, progress.lastActivityAt],
-  );
+  const topics = category
+    ? computeCategoryTopicStats(questions, progress.toState(), category.id)
+    : [];
 
   if (!category || !stats) {
     return (
@@ -74,6 +72,11 @@ export const CategoryPage = observer(function CategoryPage() {
   };
 
   const startQuiz = () => {
+    if (progress.activeQuiz) {
+      ui.notify('Сначала завершите текущую сессию, чтобы не потерять её прогресс.', 'warning');
+      navigate('/quiz');
+      return;
+    }
     if (difficulties.length === 0 || available === 0) {
       ui.notify('Выберите хотя бы один уровень сложности.', 'warning');
       return;
@@ -94,6 +97,11 @@ export const CategoryPage = observer(function CategoryPage() {
   };
 
   const startMistakes = () => {
+    if (progress.activeQuiz) {
+      ui.notify('Сначала завершите текущую сессию, чтобы не потерять её прогресс.', 'warning');
+      navigate('/quiz');
+      return;
+    }
     const ids = buildQuestionIds({
       mode: 'mistakes',
       categoryId: category.id,

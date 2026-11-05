@@ -1502,6 +1502,31 @@ fieldset {
   font-size: 10px;
 }
 
+.data-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.data-panel h2 {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.data-panel p {
+  max-width: 720px;
+  margin-top: 3px;
+  color: var(--faint);
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
 .topic-rank {
   display: flex;
   flex-direction: column;

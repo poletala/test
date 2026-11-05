@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components -- контекст, провайдер и хук намеренно живут в одном модуле. */
 import { createContext, useContext, type ReactNode } from 'react';
 import type { RootStore } from '../stores/RootStore';
 

@@ -3,7 +3,11 @@ import type { CompletionConfig, Question } from '../types';
 export function normalizeCompletion(value: string, config: CompletionConfig): string {
   let normalized = value.trim();
   if (config.ignoreWhitespace !== false) {
-    normalized = normalized.replace(/\s+/g, ' ');
+    normalized = normalized
+      .replace(/\s+/g, ' ')
+      // Для коротких выражений пробелы вокруг пунктуации не меняют смысл:
+      // arr.filter( Boolean ) и arr.filter(Boolean) должны приниматься одинаково.
+      .replace(/\s*([()[\]{},;.>])\s*/g, '$1');
   }
   if (!config.caseSensitive) {
     normalized = normalized.toLowerCase();

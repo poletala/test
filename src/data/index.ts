@@ -5,10 +5,11 @@ import { javascriptPart3 } from './javascript/part3';
 import { typescriptPart1 } from './typescript/part1';
 import { typescriptPart2 } from './typescript/part2';
 import { supplementalQuestions } from './supplemental';
-//import { reactPart2 } from './react/part2';
-//import { reactPart3 } from './react/part3';
-//import { mobxPart1 } from './mobx/part1';
-//import { mobxPart2 } from './mobx/part2';
+import { reactPart1 } from './react/part1';
+import { reactPart2 } from './react/part2';
+import { reactPart3 } from './react/part3';
+import { mobxPart1 } from './mobx/part1';
+import { mobxPart2 } from './mobx/part2';
 //import { nodejsPart1 } from './nodejs/part1';
 //import { nodejsPart2 } from './nodejs/part2';
 //import { htmlCssPart1 } from './html-css/part1';
@@ -29,12 +30,12 @@ export const QUESTIONS: readonly Question[] = [
   ...javascriptPart3,
   ...typescriptPart1,
   ...typescriptPart2,
+  ...reactPart1,
+  ...reactPart2,
+  ...reactPart3,
+  ...mobxPart1,
+  ...mobxPart2,
   ...supplementalQuestions,
-  // ...reactPart1,
-  // ...reactPart2,
-  // ...reactPart3,
-  // ...mobxPart1,
-  // ...mobxPart2,
   // ...nodejsPart1,
   // ...nodejsPart2,
   // ...htmlCssPart1,
